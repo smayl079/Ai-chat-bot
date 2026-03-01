@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Load environment variables
 dotenv.config();
@@ -10,10 +10,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Initialize OpenAI
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize Google Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
 // Middleware
 app.use(cors()); // Enable CORS for frontend communication
@@ -37,31 +36,16 @@ app.post('/chat', async (req, res) => {
     }
 
     // Check if API key is configured
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.GOOGLE_API_KEY) {
       return res.status(500).json({ 
-        error: 'OpenAI API key is not configured.' 
+        error: 'Google API key is not configured.' 
       });
     }
 
-    // Call OpenAI API
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content: "You are a helpful AI assistant. Provide clear, concise, and friendly responses."
-        },
-        {
-          role: "user",
-          content: message
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 500,
-    });
-
-    // Extract AI response
-    const aiResponse = completion.choices[0].message.content;
+    // Call Google Gemini API
+    const result = await model.generateContent(message);
+    const response = await result.response;
+    const aiResponse = response.text();
 
     // Send response back to frontend
     res.json({ 
@@ -72,14 +56,14 @@ app.post('/chat', async (req, res) => {
   } catch (error) {
     console.error('Error in /chat endpoint:', error);
     
-    // Handle specific OpenAI errors
-    if (error.status === 401) {
+    // Handle specific Google API errors
+    if (error.message?.includes('API key') || error.message?.includes('invalid')) {
       return res.status(401).json({ 
-        error: 'Invalid OpenAI API key.' 
+        error: 'Invalid Google API key.' 
       });
     }
     
-    if (error.status === 429) {
+    if (error.message?.includes('quota') || error.message?.includes('rate limit')) {
       return res.status(429).json({ 
         error: 'Rate limit exceeded. Please try again later.' 
       });
