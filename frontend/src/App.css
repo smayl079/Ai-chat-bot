@@ -1,0 +1,30 @@
+.app {
+  min-height: 100vh;
+  background-color: #ffffff;
+  position: relative;
+}
+
+/* Main content styling */
+.main-content {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.content-center {
+  text-align: center;
+}
+
+.content-center h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.content-center p {
+  font-size: 1.1rem;
+  color: #666;
+}
