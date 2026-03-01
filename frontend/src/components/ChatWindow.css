@@ -1,9 +1,11 @@
+/* ============================================
+   CHAT WINDOW - RESIZABLE & STATES
+   ============================================ */
+
 .chat-window {
   position: fixed;
   bottom: 100px;
   right: 30px;
-  width: 380px;
-  height: 550px;
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
@@ -12,6 +14,28 @@
   overflow: hidden;
   z-index: 999;
   animation: slideUp 0.3s ease-out;
+  transition: width 0.1s ease, height 0.1s ease, border-radius 0.3s ease;
+}
+
+/* Window States */
+.chat-window.normal {
+  /* Normal state - uses inline width/height */
+}
+
+.chat-window.minimized {
+  height: auto !important;
+  overflow: visible;
+}
+
+.chat-window.maximized {
+  width: 100vw !important;
+  height: 100vh !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  border-radius: 0 !important;
+  animation: expandWindow 0.3s ease-out;
 }
 
 @keyframes slideUp {
@@ -25,7 +49,101 @@
   }
 }
 
-/* Header */
+@keyframes expandWindow {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   RESIZE HANDLES
+   ============================================ */
+
+.resize-handle {
+  position: absolute;
+  z-index: 10;
+}
+
+/* Corner Handles */
+.resize-handle.corner {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+}
+
+.resize-handle.corner.nw {
+  top: 0;
+  left: 0;
+  cursor: nwse-resize;
+}
+
+.resize-handle.corner.ne {
+  top: 0;
+  right: 0;
+  cursor: nesw-resize;
+}
+
+.resize-handle.corner.sw {
+  bottom: 0;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.resize-handle.corner.se {
+  bottom: 0;
+  right: 0;
+  cursor: nwse-resize;
+}
+
+/* Edge Handles */
+.resize-handle.edge {
+  background: transparent;
+}
+
+.resize-handle.edge.n {
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+.resize-handle.edge.s {
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 4px;
+  cursor: ns-resize;
+}
+
+.resize-handle.edge.e {
+  right: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+.resize-handle.edge.w {
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 4px;
+  cursor: ew-resize;
+}
+
+/* Hover effect for resize handles */
+.resize-handle:hover {
+  opacity: 0.8;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
 .chat-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -34,6 +152,17 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 16px 16px 0 0;
+  user-select: none;
+  cursor: default;
+  flex-shrink: 0;
+}
+
+.chat-window.maximized .chat-header {
+  border-radius: 0;
+}
+
+.chat-window.minimized .chat-header {
+  border-radius: 16px;
 }
 
 .header-content {
@@ -58,7 +187,14 @@
   margin: 0;
 }
 
-.close-button {
+/* Header Controls */
+.header-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.control-button {
   background: transparent;
   border: none;
   color: white;
@@ -68,22 +204,38 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
+  width: 32px;
+  height: 32px;
 }
 
-.close-button:hover {
+.control-button:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
-/* Messages Area */
+.control-button:active {
+  transform: scale(0.95);
+}
+
+.control-button svg {
+  display: block;
+}
+
+/* ============================================
+   MESSAGES AREA
+   ============================================ */
+
 .chat-messages {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 20px;
   background: #f8f9fa;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-height: 0; /* Important for flex scrolling */
 }
 
 .chat-messages::-webkit-scrollbar {
@@ -199,7 +351,10 @@
   }
 }
 
-/* Input Area */
+/* ============================================
+   INPUT AREA
+   ============================================ */
+
 .chat-input-area {
   padding: 16px 20px;
   background: white;
@@ -207,6 +362,7 @@
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-shrink: 0;
 }
 
 .chat-input {
@@ -217,6 +373,7 @@
   font-size: 14px;
   outline: none;
   transition: border 0.2s ease;
+  font-family: inherit;
 }
 
 .chat-input:focus {
@@ -257,42 +414,72 @@
   cursor: not-allowed;
 }
 
-/* Responsive Design */
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
 
 /* Tablet and medium screens */
 @media (max-width: 768px) {
-  .chat-window {
-    width: calc(100vw - 40px);
-    height: calc(100vh - 140px);
-    right: 20px;
-    bottom: 100px;
-    max-width: 500px;
-  }
-}
-
-/* Mobile phones */
-@media (max-width: 480px) {
-  .chat-window {
-    width: calc(100vw - 20px);
-    height: calc(100vh - 100px);
-    right: 10px;
-    bottom: 10px;
-    border-radius: 12px;
+  .chat-window:not(.maximized) {
+    max-width: calc(100vw - 40px);
+    max-height: calc(100vh - 140px);
   }
   
   .chat-header {
     padding: 16px;
   }
   
-  .chat-header h3 {
-    font-size: 16px;
-  }
-  
   .chat-messages {
     padding: 16px;
   }
   
-  .chat-input-container {
+  .chat-input-area {
+    padding: 12px 16px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .chat-window:not(.maximized) {
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 100px);
+    border-radius: 12px;
+  }
+  
+  .chat-header {
+    padding: 14px;
+  }
+  
+  .chat-header h3 {
+    font-size: 16px;
+  }
+  
+  .ai-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .control-button {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+  }
+  
+  .chat-messages {
     padding: 12px;
+  }
+  
+  .message {
+    max-width: 85%;
+  }
+  
+  /* Hide edge resize handles on mobile, keep corners */
+  .resize-handle.edge {
+    display: none;
+  }
+  
+  .resize-handle.corner {
+    width: 16px;
+    height: 16px;
   }
 }
