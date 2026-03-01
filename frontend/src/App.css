@@ -2,6 +2,7 @@
   min-height: 100vh;
   background-color: #ffffff;
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Main content styling */
@@ -27,4 +28,29 @@
 .content-center p {
   font-size: 1.1rem;
   color: #666;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .content-center h1 {
+    font-size: 2rem;
+  }
+  
+  .content-center p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 16px;
+  }
+  
+  .content-center h1 {
+    font-size: 1.75rem;
+  }
+  
+  .content-center p {
+    font-size: 0.95rem;
+  }
 }

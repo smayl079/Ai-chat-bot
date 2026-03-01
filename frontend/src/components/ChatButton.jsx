@@ -14,12 +14,13 @@ import './ChatButton.css';
  */
 const ChatButton = ({ onClick, isOpen }) => {
   // Button dimensions for boundary calculations
-  const BUTTON_SIZE = 60;
+  // Use larger size to account for mobile (70px) for safe boundaries
+  const BUTTON_SIZE = 70;
   
-  // Default position: bottom-right corner (30px padding)
+  // Default position: bottom-right corner (20px padding on mobile, 30px on desktop)
   const DEFAULT_POSITION = {
-    bottom: 30,
-    right: 30,
+    bottom: 20,
+    right: 20,
     top: null,
     left: null
   };
@@ -206,46 +207,34 @@ const ChatButton = ({ onClick, isOpen }) => {
     return style;
   };
 
+  // Hide button when chat is open
+  if (isOpen) {
+    return null;
+  }
+
   return (
     <button 
       ref={buttonRef}
-      className={`chat-button ${isOpen ? 'open' : ''} ${isDragging ? 'dragging' : ''}`}
+      className={`chat-button ${isDragging ? 'dragging' : ''}`}
       style={getPositionStyle()}
       onClick={handleClick}
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       aria-label="Toggle chat"
     >
-      {isOpen ? (
-        // Close icon (X)
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      ) : (
-        // Chat icon
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-      )}
+      {/* Chat icon */}
+      <svg 
+        width="24" 
+        height="24" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2"
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      >
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
     </button>
   );
 };

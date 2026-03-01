@@ -15,7 +15,7 @@
   color: white;
   
   /* Layout */
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   
@@ -30,9 +30,14 @@
   -moz-user-select: none;
   -ms-user-select: none;
   touch-action: none; /* Better mobile dragging */
+  -webkit-tap-highlight-color: transparent;
   
-  /* Layering */
-  z-index: 1000;
+  /* Layering - High z-index for visibility */
+  z-index: 9999;
+  
+  /* Ensure visibility */
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Hover state - Only when not dragging */
@@ -63,6 +68,8 @@
 .chat-button svg {
   transition: transform 0.3s ease;
   pointer-events: none; /* Prevent SVG from interfering with drag */
+  width: 24px;
+  height: 24px;
 }
 
 .chat-button:not(.dragging):hover svg {
@@ -78,16 +85,53 @@
   background: transparent;
 }
 
-/* Mobile optimizations */
-@media (max-width: 768px) {
+/* Tablet and Mobile optimizations */
+@media (max-width: 1024px) {
   .chat-button {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
   }
   
   .chat-button svg {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Mobile optimizations - Larger touch target */
+@media (max-width: 768px) {
+  .chat-button {
+    width: 70px !important;
+    height: 70px !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .chat-button svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  /* Disable hover effects on mobile */
+  .chat-button:not(.dragging):hover {
+    transform: scale(1);
+  }
+  
+  /* Better active state for touch */
+  .chat-button:not(.dragging):active {
+    transform: scale(0.9);
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  .chat-button {
+    width: 65px !important;
+    height: 65px !important;
+  }
+  
+  .chat-button svg {
+    width: 26px !important;
+    height: 26px !important;
   }
 }
 
