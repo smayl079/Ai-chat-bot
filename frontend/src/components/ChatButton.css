@@ -1,44 +1,102 @@
+/* ============================================
+   DRAGGABLE CHAT BUTTON STYLES
+   ============================================ */
+
 .chat-button {
+  /* Positioning */
   position: fixed;
-  bottom: 30px;
-  right: 30px;
   width: 60px;
   height: 60px;
+  
+  /* Appearance */
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  cursor: pointer;
+  color: white;
+  
+  /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  /* Effects */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  /* Interaction */
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  touch-action: none; /* Better mobile dragging */
+  
+  /* Layering */
   z-index: 1000;
-  color: white;
 }
 
-.chat-button:hover {
+/* Hover state - Only when not dragging */
+.chat-button:not(.dragging):hover {
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.chat-button:active {
+/* Active state - When clicking (not dragging) */
+.chat-button:not(.dragging):active {
   transform: scale(0.95);
 }
 
+/* Dragging state */
+.chat-button.dragging {
+  cursor: grabbing;
+  transform: scale(1.05);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+  transition: none; /* Disable transitions during drag for smooth movement */
+}
+
+/* Open state (when chat window is visible) */
 .chat-button.open {
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
-/* Smooth icon transition */
+/* Icon transitions */
 .chat-button svg {
   transition: transform 0.3s ease;
+  pointer-events: none; /* Prevent SVG from interfering with drag */
 }
 
-.chat-button:hover svg {
+.chat-button:not(.dragging):hover svg {
   transform: rotate(10deg);
 }
 
 .chat-button.open svg {
   transform: rotate(90deg);
+}
+
+/* Prevent text selection during drag */
+.chat-button::selection {
+  background: transparent;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .chat-button {
+    width: 56px;
+    height: 56px;
+  }
+  
+  .chat-button svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+/* Accessibility - Focus state */
+.chat-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+.chat-button:focus:not(:focus-visible) {
+  outline: none;
 }
