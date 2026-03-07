@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './ChatWindow.css';
-import { useResizeHandler, ResizeHandles } from './ResizeHandler';
 
 /**
  * ChatWindow Component
@@ -17,8 +16,6 @@ import { useResizeHandler, ResizeHandles } from './ResizeHandler';
 const ChatWindow = ({ onClose }) => {
   // Default dimensions
   const DEFAULT_SIZE = { width: 380, height: 550 };
-  const MIN_SIZE = { width: 320, height: 400 };
-  const MAX_SIZE = { width: 1200, height: 900 };
 
   // Chat messages state
   const [messages, setMessages] = useState([
@@ -30,6 +27,12 @@ const ChatWindow = ({ onClose }) => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0); // Track cooldown timer
+  
+  // Generate unique session ID for this page session (persists while page is open)
+  const [sessionId] = useState(() => {
+    return `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+  });
   
   // Window state management
   const [windowState, setWindowState] = useState('normal'); // 'normal' | 'minimized' | 'maximized'
@@ -38,16 +41,11 @@ const ChatWindow = ({ onClose }) => {
   
   const messagesEndRef = useRef(null);
   const windowRef = useRef(null);
-
-  // Initialize resize handler
-  const { startResize } = useResizeHandler(
-    windowRef,
-    size,
-    setSize,
-    MIN_SIZE,
-    MAX_SIZE,
-    windowState
-  );
+  const textareaRef = useRef(null);
+  const lastMessageTimeRef = useRef(0);
+  // Gemini 2.5 Flash has 5 RPM limit = 12 seconds between requests
+  // Frontend enforces 15 seconds to be extra safe and account for network delays
+  const MIN_MESSAGE_INTERVAL = 15000; // 15 seconds between messages
 
   /**
    * Load saved state from localStorage on mount
@@ -99,6 +97,31 @@ const ChatWindow = ({ onClose }) => {
     scrollToBottom();
   }, [messages]);
 
+  // Auto-resize textarea as user types
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+    }
+  }, [inputMessage]);
+
+  // Update cooldown timer every second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const timeSinceLastMessage = now - lastMessageTimeRef.current;
+      if (timeSinceLastMessage < MIN_MESSAGE_INTERVAL) {
+        const remaining = Math.ceil((MIN_MESSAGE_INTERVAL - timeSinceLastMessage) / 1000);
+        setCooldownSeconds(remaining);
+      } else {
+        setCooldownSeconds(0);
+      }
+    }, 100); // Update every 100ms for smooth countdown
+
+    return () => clearInterval(interval);
+  }, [MIN_MESSAGE_INTERVAL]);
+
   /**
    * Window control functions
    */
@@ -128,6 +151,23 @@ const ChatWindow = ({ onClose }) => {
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 
+    // Rate limiting: Check if enough time has passed since last message
+    const now = Date.now();
+    const timeSinceLastMessage = now - lastMessageTimeRef.current;
+    
+    if (timeSinceLastMessage < MIN_MESSAGE_INTERVAL) {
+      const waitTime = Math.ceil((MIN_MESSAGE_INTERVAL - timeSinceLastMessage) / 1000);
+      const warningMessage = {
+        role: 'assistant',
+        content: `⏱️ Please wait ${waitTime} second${waitTime > 1 ? 's' : ''} before sending another message. \n\nGemini API has a rate limit of 5 requests per minute to prevent overuse.`,
+        timestamp: new Date(),
+        isError: true,
+      };
+      setMessages(prev => [...prev, warningMessage]);
+      return;
+    }
+
+    lastMessageTimeRef.current = now;
     const userMessage = inputMessage.trim();
     setInputMessage('');
 
@@ -146,12 +186,16 @@ const ChatWindow = ({ onClose }) => {
       // Get API URL from environment variable
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       
-      const response = await fetch(`${apiUrl}/chat`, {
+      // Use chat-session endpoint to maintain conversation history on backend
+      const response = await fetch(`${apiUrl}/chat-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: userMessage }),
+        body: JSON.stringify({ 
+          message: userMessage,
+          sessionId: sessionId // Send session ID to maintain conversation history
+        }),
       });
 
       const data = await response.json();
@@ -165,10 +209,20 @@ const ChatWindow = ({ onClose }) => {
         };
         setMessages(prev => [...prev, aiMessage]);
       } else {
-        // Handle error from backend
+        // Handle specific error codes
+        let errorContent = 'Unable to get response. Please try again.';
+        
+        if (response.status === 429) {
+          errorContent = '⚠️ Rate limit exceeded. The Gemini API has a limit of 5 requests per minute.\n\nPlease wait at least 15 seconds between messages to avoid this error.';
+        } else if (response.status === 401) {
+          errorContent = 'Authentication error. Please check the API key configuration.';
+        } else if (data.error) {
+          errorContent = data.error;
+        }
+        
         const errorMessage = {
           role: 'assistant',
-          content: `Error: ${data.error || 'Unable to get response. Please try again.'}`,
+          content: `Error: ${errorContent}`,
           timestamp: new Date(),
           isError: true,
         };
@@ -237,9 +291,6 @@ const ChatWindow = ({ onClose }) => {
       className={`chat-window ${windowState}`}
       style={getWindowStyle()}
     >
-      {/* Resize Handles */}
-      <ResizeHandles onResize={startResize} windowState={windowState} />
-
       {/* Header */}
       {/* eslint-disable-next-line jsx-a11y/prefer-tag-over-role */}
       <div 
@@ -249,11 +300,6 @@ const ChatWindow = ({ onClose }) => {
         title="Double-click to maximize/restore"
       >
         <div className="header-content">
-          <div className="ai-avatar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 2v20M2 12h20"/>
-            </svg>
-          </div>
           <h3>AI Assistant</h3>
         </div>
         <div className="header-controls">
@@ -277,7 +323,7 @@ const ChatWindow = ({ onClose }) => {
             className="control-button maximize-button" 
             onClick={handleMaximize}
             aria-label={windowState === 'maximized' ? 'Restore' : 'Maximize'}
-            title={windowState === 'maximized' ? 'Restore' : 'Maximize'}
+            title={windowState === 'maximized' ? 'Restore' : 'Fullscreen'}
           >
             {windowState === 'maximized' ? (
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -341,26 +387,53 @@ const ChatWindow = ({ onClose }) => {
 
           {/* Input Area */}
           <div className="chat-input-area">
-            <input
-              type="text"
+            <textarea
+              ref={textareaRef}
               className="chat-input"
               placeholder="Type your message..."
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyDown={handleKeyDown}
               disabled={isLoading}
+              rows={1}
+              style={{
+                resize: 'none',
+                minHeight: '40px',
+                maxHeight: '120px',
+                overflowY: 'auto'
+              }}
             />
             <button 
               className="send-button"
               onClick={sendMessage}
-              disabled={!inputMessage.trim() || isLoading}
+              disabled={!inputMessage.trim() || isLoading || cooldownSeconds > 0}
               aria-label="Send message"
+              title={cooldownSeconds > 0 ? `Wait ${cooldownSeconds}s before sending` : "Send message (Enter)"}
+              style={{
+                opacity: cooldownSeconds > 0 ? 0.5 : 1,
+                cursor: cooldownSeconds > 0 ? 'not-allowed' : 'pointer'
+              }}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
+              {cooldownSeconds > 0 ? (
+                <span style={{ fontSize: '12px', fontWeight: 'bold' }}>{cooldownSeconds}s</span>
+              ) : (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              )}
             </button>
+          </div>
+          {/* Conversation info indicator */}
+          <div className="chat-info" style={{
+            fontSize: '10px',
+            color: '#888',
+            padding: '4px 12px',
+            textAlign: 'center',
+            borderTop: '1px solid rgba(0,0,0,0.05)'
+          }}>
+            💬 {messages.length} message{messages.length === 1 ? '' : 's'} • 
+            ⏱️ 15s wait between messages (API limit)
           </div>
         </>
       )}
