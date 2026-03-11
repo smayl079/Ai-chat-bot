@@ -1,0 +1,30 @@
+{
+  "name": "chatbot-platform-database",
+  "version": "1.0.0",
+  "description": "PostgreSQL database schema and seed data for multi-tenant chatbot platform",
+  "main": "example-queries.js",
+  "scripts": {
+    "test": "node test-connection.js",
+    "test:connection": "node test-connection.js",
+    "examples": "node example-queries.js",
+    "setup": "echo 'Run: psql -U postgres -d chatbot_platform -f schema.sql && psql -U postgres -d chatbot_platform -f seed.sql'",
+    "info": "echo 'Database tools installed. See README.md for setup instructions.'"
+  },
+  "keywords": [
+    "postgresql",
+    "database",
+    "chatbot",
+    "multi-tenant",
+    "RAG"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.11.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.11.0",
+    "prisma": "^5.11.0"
+  }
+}

@@ -1,0 +1,188 @@
+// This is your Prisma schema file for the multi-tenant chatbot platform
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Core Models
+// ============================================
+
+model Website {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  domain        String   @unique @db.VarChar(255)
+  businessType  String   @map("business_type") @db.VarChar(100)
+  chatbotName   String   @default("Assistant") @map("chatbot_name") @db.VarChar(100)
+  systemPrompt  String?  @map("system_prompt") @db.Text
+  language      String   @default("en") @db.VarChar(10)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  pages            Page[]
+  faqItems         FaqItem[]
+  services         Service[]
+  contactInfo      ContactInfo?
+  chatbotDocuments ChatbotDocument[]
+  chatbotChunks    ChatbotChunk[]
+
+  @@index([domain])
+  @@index([isActive])
+  @@map("websites")
+}
+
+model Page {
+  id              Int      @id @default(autoincrement())
+  websiteId       Int      @map("website_id")
+  title           String   @db.VarChar(255)
+  slug            String   @db.VarChar(255)
+  content         String   @db.Text
+  metaDescription String?  @map("meta_description") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@map("pages")
+}
+
+model FaqItem {
+  id        Int      @id @default(autoincrement())
+  websiteId Int      @map("website_id")
+  question  String   @db.Text
+  answer    String   @db.Text
+  category  String?  @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@index([websiteId, category])
+  @@map("faq_items")
+}
+
+model Service {
+  id               Int      @id @default(autoincrement())
+  websiteId        Int      @map("website_id")
+  name             String   @db.VarChar(255)
+  shortDescription String?  @map("short_description") @db.Text
+  fullDescription  String   @map("full_description") @db.Text
+  price            Decimal? @db.Decimal(10, 2)
+  currency         String   @default("USD") @db.VarChar(10)
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@index([websiteId, isActive])
+  @@map("services")
+}
+
+model ContactInfo {
+  id           Int      @id @default(autoincrement())
+  websiteId    Int      @unique @map("website_id")
+  email        String?  @db.VarChar(255)
+  phone        String?  @db.VarChar(50)
+  address      String?  @db.Text
+  workingHours String?  @map("working_hours") @db.Text
+  whatsapp     String?  @db.VarChar(50)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@map("contact_info")
+}
+
+model ChatbotDocument {
+  id         Int      @id @default(autoincrement())
+  websiteId  Int      @map("website_id")
+  sourceType String   @map("source_type") @db.VarChar(50)
+  title      String   @db.VarChar(255)
+  rawContent String   @map("raw_content") @db.Text
+  sourceUrl  String?  @map("source_url") @db.VarChar(500)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  website Website        @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  chunks  ChatbotChunk[]
+
+  @@index([websiteId])
+  @@index([websiteId, sourceType])
+  @@map("chatbot_documents")
+}
+
+model ChatbotChunk {
+  id         Int      @id @default(autoincrement())
+  websiteId  Int      @map("website_id")
+  documentId Int      @map("document_id")
+  chunkText  String   @map("chunk_text") @db.Text
+  chunkIndex Int      @map("chunk_index")
+  // embedding Unsupported("vector(768)")? // Uncomment if using pgvector
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  website  Website         @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  document ChatbotDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, chunkIndex])
+  @@index([websiteId])
+  @@index([documentId])
+  @@map("chatbot_chunks")
+}
+
+// ============================================
+// Optional: Conversation History Models
+// ============================================
+
+// Uncomment these models if you want to store chat history
+
+// model Conversation {
+//   id            Int       @id @default(autoincrement())
+//   websiteId     Int       @map("website_id")
+//   sessionId     String    @map("session_id") @db.VarChar(255)
+//   userIp        String?   @map("user_ip") @db.VarChar(45)
+//   userAgent     String?   @map("user_agent") @db.Text
+//   startedAt     DateTime  @default(now()) @map("started_at")
+//   lastMessageAt DateTime  @default(now()) @map("last_message_at")
+//   
+//   // Relations
+//   website  Website   @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+//   messages Message[]
+//   
+//   @@index([websiteId])
+//   @@index([sessionId])
+//   @@map("conversations")
+// }
+
+// model Message {
+//   id             Int          @id @default(autoincrement())
+//   conversationId Int          @map("conversation_id")
+//   role           String       @db.VarChar(20) // 'user' or 'assistant'
+//   content        String       @db.Text
+//   createdAt      DateTime     @default(now()) @map("created_at")
+//   
+//   // Relations
+//   conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+//   
+//   @@index([conversationId])
+//   @@map("messages")
+// }

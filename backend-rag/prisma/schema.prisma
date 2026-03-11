@@ -1,0 +1,137 @@
+// Multi-tenant Chatbot Platform - Prisma Schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Website {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(255)
+  domain        String   @unique @db.VarChar(255)
+  businessType  String   @map("business_type") @db.VarChar(100)
+  chatbotName   String   @default("Assistant") @map("chatbot_name") @db.VarChar(100)
+  systemPrompt  String?  @map("system_prompt") @db.Text
+  language      String   @default("en") @db.VarChar(10)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  pages            Page[]
+  faqItems         FaqItem[]
+  services         Service[]
+  contactInfo      ContactInfo?
+  chatbotDocuments ChatbotDocument[]
+  chatbotChunks    ChatbotChunk[]
+
+  @@index([domain])
+  @@index([isActive])
+  @@map("websites")
+}
+
+model Page {
+  id              Int      @id @default(autoincrement())
+  websiteId       Int      @map("website_id")
+  title           String   @db.VarChar(255)
+  slug            String   @db.VarChar(255)
+  content         String   @db.Text
+  metaDescription String?  @map("meta_description") @db.Text
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@unique([websiteId, slug])
+  @@index([websiteId])
+  @@map("pages")
+}
+
+model FaqItem {
+  id        Int      @id @default(autoincrement())
+  websiteId Int      @map("website_id")
+  question  String   @db.Text
+  answer    String   @db.Text
+  category  String?  @db.VarChar(100)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@index([websiteId, category])
+  @@map("faq_items")
+}
+
+model Service {
+  id               Int      @id @default(autoincrement())
+  websiteId        Int      @map("website_id")
+  name             String   @db.VarChar(255)
+  shortDescription String?  @map("short_description") @db.Text
+  fullDescription  String   @map("full_description") @db.Text
+  price            Decimal? @db.Decimal(10, 2)
+  currency         String   @default("USD") @db.VarChar(10)
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@index([websiteId, isActive])
+  @@map("services")
+}
+
+model ContactInfo {
+  id           Int      @id @default(autoincrement())
+  websiteId    Int      @unique @map("website_id")
+  email        String?  @db.VarChar(255)
+  phone        String?  @db.VarChar(50)
+  address      String?  @db.Text
+  workingHours String?  @map("working_hours") @db.Text
+  whatsapp     String?  @db.VarChar(50)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  website Website @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+
+  @@index([websiteId])
+  @@map("contact_info")
+}
+
+model ChatbotDocument {
+  id         Int      @id @default(autoincrement())
+  websiteId  Int      @map("website_id")
+  sourceType String   @map("source_type") @db.VarChar(50)
+  title      String   @db.VarChar(255)
+  rawContent String   @map("raw_content") @db.Text
+  sourceUrl  String?  @map("source_url") @db.VarChar(500)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  website Website        @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  chunks  ChatbotChunk[]
+
+  @@index([websiteId])
+  @@index([websiteId, sourceType])
+  @@map("chatbot_documents")
+}
+
+model ChatbotChunk {
+  id         Int      @id @default(autoincrement())
+  websiteId  Int      @map("website_id")
+  documentId Int      @map("document_id")
+  chunkText  String   @map("chunk_text") @db.Text
+  chunkIndex Int      @map("chunk_index")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  website  Website         @relation(fields: [websiteId], references: [id], onDelete: Cascade)
+  document ChatbotDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, chunkIndex])
+  @@index([websiteId])
+  @@index([documentId])
+  @@map("chatbot_chunks")
+}
