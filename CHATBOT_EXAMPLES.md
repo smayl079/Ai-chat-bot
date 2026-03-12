@@ -9,56 +9,39 @@ Xəyal haqqında ətraflı məlumat ver
 
 **Expected AI Response:**
 ```
-🔹 İşçi Haqqında Ümumi Məlumat
+**1. Ümumi Məlumat**
 
-Ad Soyad: Xəyal Məmmədov
-E-poçt: xeyal.memmedov@company.com
-Telefon: +994-55-123-4567
-Status: Aktiv
-İşə Qəbul Tarixi: 15 Mart 2018
-Məkan: Bakı, Azərbaycan
+Xəyal Məmmədov şirkətimizin Mühəndislik şöbəsində Senior Backend Developer vəzifəsində çalışan yüksək ixtisaslı mütəxəssisdir. O, 2018-ci ilin martından bəri komandamızın aktiv üzvüdür və bu müddət ərzində özünü peşəkar və etibarlı developer kimi tanıtmışdır. Xəyal Bakıda yerləşir və xeyal.memmedov@company.com e-poçt ünvanı vasitəsilə əlaqə saxlamaq mümkündür.
 
-🔹 Vəzifə və Şöbə
+**2. Vəzifə və Şöbə**
 
-Vəzifə: Senior Backend Developer
-Şöbə: Mühəndislik (Engineering)
-Meneceri: Sarah Chen
-İşə Götürmə Növü: Tam ştat (Full-time)
+Xəyal Mühəndislik şöbəsində tam ştat rejimdə Senior Backend Developer kimi fəaliyyət göstərir və birbaşa Sarah Chen-ə hesabat verir. Bu vəzifədə o, backend arxitektura və miqyaslana bilən API həllərinin hazırlanmasında aparıcı rol oynayır.
 
-🔹 İş Təcrübəsi
+**3. İş Təcrübəsi**
 
-Ümumi təcrübə: 8 il
-Təhsil: Kompüter Elmləri üzrə Magistr dərəcəsi
-Universitet: Azərbaycan Texniki Universiteti (2016)
+Səkkiz illik professional təcrübəyə malik olan Xəyal, Azərbaycan Texniki Universitetində 2016-cı ildə Kompüter Elmləri üzrə Magistr dərəcəsini tamamlamışdır. Karyerası boyu o, müxtəlif layihələrdə iştirak edərək texniki biliklərini davamlı olaraq inkişaf etdirmişdir. Dörd dil bilməsi - Azərbaycan dili (ana dili), İngilis dili (səlis), Türk dili (yüksək səviyyə) və Rus dili (orta səviyyə) - onu beynəlxalq komandalarla işləmək üçün əlverişli namizəd edir.
 
-🔹 Texniki Bacarıqlar
+**4. Texniki Bacarıqlar**
 
-Node.js, Express.js, PostgreSQL, MongoDB, REST API, Docker, Microservices, Redis, AWS, CI/CD
+Xəyal müasir backend texnologiyalarında geniş təcrübəyə malikdir. Onun əsas ixtisas sahələrinə Node.js və Express.js framework-ləri, PostgreSQL və MongoDB kimi verilənlər bazası sistemləri daxildir. Bundan əlavə, o REST API dizaynı, Docker konteynerləşdirmə, mikroservis arxitekturası, Redis caching, AWS bulud xidmətləri və CI/CD pipeline-ların qurulmasında dərin bilikləri ilə seçilir.
 
-🔹 Layihələr
+**5. Əsas Layihələr**
 
-1. Payment Gateway Integration (2023-09 - 2024-02)
-   - Rol: Lead Backend Developer
-   - Gündə 100.000+ əməliyyat prosesi
-   - Texnologiyalar: Node.js, PostgreSQL, Redis, Stripe API, Docker
+Xəyal son illər üç əhəmiyyətli layihədə aparıcı rol oynamışdır:
 
-2. Microservices Migration (2022-01 - 2023-06)
-   - Rol: Senior Backend Developer
-   - Monolit arxitekturanı mikroservislərə köçürmə
-   - Texnologiyalar: Node.js, Docker, Kubernetes, RabbitMQ, MongoDB
+**Payment Gateway Integration layihəsində** (sentyabr 2023 - fevral 2024) Lead Backend Developer kimi gündə 100.000-dən çox əməliyyatı emal edən güclü ödəniş sisteminin dizayn və tətbiqini həyata keçirmişdir. Bu layihədə Node.js, PostgreSQL, Redis, Stripe API və Docker texnologiyalarından istifadə edilmişdir.
 
-3. Real-time Analytics Dashboard API (2021-04 - 2021-11)
-   - Rol: Backend Developer
-   - Yüksək performanslı REST API-lər
-   - Texnologiyalar: Express.js, PostgreSQL, Redis, WebSocket, AWS Lambda
+**Microservices Migration layihəsində** (yanvar 2022 - iyun 2023) komandanın monolit arxitekturanı mikroservislərə köçürülməsinə rəhbərlik etmişdir. Bu köçürmə sistemin miqyaslanmasını və deployment sürətini əhəmiyyətli dərəcədə yaxşılaşdırmışdır. Layihədə Kubernetes, RabbitMQ və MongoDB kimi texnologiyalar tətbiq edilmişdir.
 
-🔹 Performans Xülasəsi
+**Real-time Analytics Dashboard API layihəsində** (aprel 2021 - noyabr 2021) real vaxt rejimində məlumat emalı və analitika üçün yüksək performanslı REST API-lər hazırlamışdır. WebSocket və AWS Lambda xidmətlərindən istifadə edərək effektiv həll yaratmışdır.
 
-Xəyal miqyaslana bilən və keyfiyyətli həllər təqdim edən müstəsna backend developerdir. Onun mikroservis arxitekturasındakı dərin təcrübəsi köhnə sistemlərimizin modernləşdirilməsində əsas rol oynayıb və sistem performansını 40% yaxşılaşdırıb. Junior developerləri mentorluq etməklə və hərtərəfli kod icmalları keçirməklə güclü liderlik keyfiyyətləri nümayiş etdirir. Texniki borcun müəyyənləşdirilməsi və həlli ilə bağlı proaktiv yanaşması şirkətə əhəmiyyətli resurslar qənaət etdirib və o, tez-tez mürəkkəb mühəndislik çətinliklərinə innovativ həllər təklif edir.
+**6. Performans Təhlili**
 
-🔹 Peşəkar Bioqrafiya
+Xəyal miqyaslana bilən və keyfiyyətli həllər təqdim edən müstəsna developer kimi qiymətləndirilir. Onun mikroservis arxitekturasındakı dərin təcrübəsi köhnə sistemlərin modernləşdirilməsində əsas rol oynamış və nəticədə sistem performansı 40% yaxşılaşmışdır. Junior developerləri mentorluq etmək və hərtərəfli kod icmalları keçirmək vasitəsilə Xəyal güclü liderlik keyfiyyətləri nümayiş etdirir. Texniki borcun erkən müəyyənləşdirilməsi və həlli ilə bağlı proaktiv yanaşması şirkətə əhəmiyyətli vaxt və maliyyə qənaəti gətirmişdir. O, tez-tez mürəkkəb texniki problemlərə innovativ və praktiki həllər təklif edir.
 
-Xəyal Məmmədov miqyaslana bilən və effektiv server tətbiqlərinin qurulmasında səkkiz illik peşəkar təcrübəyə malik yüksək ixtisaslı Senior Backend Developerdir. O, Node.js ekosistemində ixtisaslaşıb və həm SQL, həm də NoSQL verilənlər bazalarında dərin təcrübəyə malikdir. Karyerası boyunca Xəyal gündə milyonlarla sorğunu idarə edən mikroservis əsaslı həllərin arxitekturasında əsas rol oynayıb. Təmiz kod və ən yaxşı praktikalara olan həvəsi onu mühəndislik komandası daxilində texniki rəhbərlik üçün əsas şəxsə çevirmişdir. Texniki imkanlarından başqa, Xəyal əla kommunikasiya bacarıqları və mürəkkəb texniki konsepsiyaları biznes dəyərinə çevirə bilmə qabiliyyəti ilə tanınır. O, açıq mənbəli layihələrə aktiv töhfə verir və bilik paylaşımını daxili texniki çıxışlar və seminarlar vasitəsilə davam etdirir.
+**7. Peşəkar Xülasə**
+
+Xəyal Məmmədov backend development sahəsində düşünülmüş qərarlar qəbul edən və komanda üçün texniki rəhbər rolunu oynayan təcrübəli mütəxəssisdir. Node.js ekosistemində dərin ixtisası və həm SQL, həm də NoSQL verilənlər bazaları üzrə geniş bilgiləri onu çoxşaxəli layihələr üçün dəyərli resources edir. Karyerası boyu gündə milyonlarla sorğu emal edən sistemlərin arxitektura dizaynında iştirak etmişdir. Təmiz kod yazmaq və best practice-lərə riayət etmək onun işinin ayrılmaz hissəsidir. Texniki bacarıqlardan əlavə, mürəkkəb texniki anlayışları aydın şəkildə izah edə bilməsi və onları biznes dəyərinə çevirməsi onu əla kommunikator edir. Açıq mənbəli layihələrə töhfə verməsi və daxili texniki təqdimatlar vasitəsilə biliklərini paylaşması onun öyrənmək və öyrətmək həvəsini göstərir.
 ```
 
 ---
@@ -72,14 +55,11 @@ Xəyal haqqında qısa məlumat
 
 **Expected AI Response:**
 ```
-Xəyal Məmmədov - Senior Backend Developer
+Xəyal Məmmədov 2018-ci ildən bəri şirkətimizin Mühəndislik şöbəsində Senior Backend Developer vəzifəsində çalışır və səkkiz illik professional təcrübəyə malikdir. O, backend arxitektura və miqyaslana bilən API həllərinin hazırlanmasında dərin ixtisasa sahibdir. Xəyal əsasən Node.js, Express.js, PostgreSQL, MongoDB, Docker və Microservices texnologiyaları ilə işləyir.
 
-Xəyal şirkətimizin Mühəndislik şöbəsində 2018-ci ildən bəri çalışan 8 illik təcrübəyə malik Senior Backend Developerdir. O, Node.js, Express.js, PostgreSQL, MongoDB, REST API, Docker və Microservices kimi texnologiyalarda ixtisaslaşıb. 
+Son illər ərzində Xəyal Payment Gateway Integration layihəsində gündə 100.000+ əməliyyat emal edən sistem qurmuş, həmçinin şirkətin monolit arxitekturasının mikroservislərə köçürülməsinə rəhbərlik etmişdir. Bu nailiyyətlər sistem performansını 40% artırmışdır. Komanda daxilində o, texniki liderlik keyfiyyətləri və mentorluq bacarıqları ilə seçilir.
 
-Xəyal Payment Gateway Integration, Microservices Migration və Real-time Analytics Dashboard API kimi əhəmiyyətli layihələrdə aparıcı rol oynayıb. Onun performansı yüksək qiymətləndirilir və komanda daxilində texniki lider kimi tanınır.
-
-📍 Məkan: Bakı, Azərbaycan
-📧 E-poçt: xeyal.memmedov@company.com
+Xəyal Bakıda yerləşir və xeyal.memmedov@company.com e-poçt ünvanı vasitəsilə əlaqə saxlamaq mümkündür. O, Sarah Chen-ə hesabat verir və tam ştat rejimdə çalışır.
 ```
 
 ---
@@ -93,20 +73,19 @@ Xəyalın bacarıqları nələrdir?
 
 **Expected AI Response:**
 ```
-Xəyal Məmmədovun Texniki Bacarıqları:
+Xəyal Məmmədov backend development sahəsində geniş texniki bacarıqlara malikdir. Onun əsas ixtisas sahələri aşağıdakılardır:
 
-• Node.js
-• Express.js
-• PostgreSQL
-• MongoDB
-• REST API
-• Docker
-• Microservices
-• Redis
-• AWS
-• CI/CD
+**Backend Framework və Dillər:** Node.js və Express.js framework-lərində dərin təcrübəyə sahibdir və bu texnologiyaları istifadə edərək yüksək performanslı API həllərini tətbiq edir.
 
-Bu bacarıqlar onun 8 illik professional təcrübəsi ərzində əldə etdiyi əsas texnologiyalardır.
+**Verilənlər Bazaları:** Həm SQL (PostgreSQL), həm də NoSQL (MongoDB) verilənlər bazası sistemlərində ixtisaslaşmışdır və hər birini müvafiq ssenarilər üçün effektiv şəkildə istifadə edir.
+
+**REST API və Mikroservislər:** REST API dizaynı və mikroservis arxitekturası üzrə geniş təcrübəyə malikdir, bu da ona miqyaslana bilən və baxımı asan sistemlər qurmağa imkan verir.
+
+**DevOps və Konteynerləşdirmə:** Docker konteynerləşdirmə texnologiyasını, CI/CD pipeline-ları və Redis caching sistemini peşəkar səviyyədə tətbiq edir.
+
+**Bulud Texnologiyaları:** AWS (Amazon Web Services) platformasının müxtəlif xidmətlərindən istifadə edərək bulud əsaslı həllər hazırlamaq bacarığına sahibdir.
+
+Bu bacarıqlar toplusu Xəyalı backend development və system architecture sahəsində kompleks layihələri uğurla həyata keçirməyə qadir mütəxəssisə çevirir.
 ```
 
 ---
@@ -120,17 +99,19 @@ Mühəndislik şöbəsində kimler çalışır?
 
 **Expected AI Response:**
 ```
-Mühəndislik Şöbəsi İşçiləri:
+Mühəndislik şöbəsində hal-hazırda beş peşəkar işçi fəaliyyət göstərir və şöbə Sarah Chen tərəfindən idarə olunur.
 
-1. Xəyal Məmmədov - Senior Backend Developer
-2. Emily Rodriguez - Frontend Developer
-3. Marcus Johnson - DevOps Engineer
-4. Sarah Chen - Engineering Manager (rəhbər)
-5. Priya Patel - QA Engineer
+**Xəyal Məmmədov** Senior Backend Developer vəzifəsində çalışır və səkkiz illik təcrübəyə malikdir. O, backend arxitektura və mikroservis həllərində ixtisaslaşmışdır.
 
-Cəmi: 5 işçi
+**Emily Rodriguez** Frontend Developer kimi beş ildir komandada çalışır. Modern React ekosistemi və user interface dizaynında güclü bacarıqlara sahibdir.
 
-Mühəndislik şöbəsi müxtəlif sahələrdə ixtisaslaşmış komandadan ibarətdir və Sarah Chen tərəfindən idarə olunur.
+**Marcus Johnson** DevOps Engineer olaraq yeddi illik təcrübə ilə infrastruktur və deployment proseslərini idarə edir. AWS və Kubernetes texnologiyalarında ekspertdir.
+
+**Sarah Chen** Engineering Manager vəzifəsində şöbəyə rəhbərlik edir. On iki illik təcrübəsi və texniki background-u sayəsində komandanı effektiv şəkildə idarə edir.
+
+**Priya Patel** QA Engineer olaraq dörd ildir test automation və keyfiyyət təminatı sahəsində çalışır. Cypress və Selenium framework-lərində bacarıqlıdır.
+
+Mühəndislik şöbəsi backend, frontend, DevOps, management və QA sahələrini əhatə edən tarazlaşdırılmış komandadır.
 ```
 
 ---
@@ -216,27 +197,15 @@ Xəyal hansı layihələrdə işləyib?
 
 **Expected AI Response:**
 ```
-Xəyal Məmmədovun Layihələri:
+Xəyal Məmmədov son illər üç strateji əhəmiyyətli layihədə aparıcı rol oynamışdır:
 
-1️⃣ Payment Gateway Integration
-📅 Müddət: Sentyabr 2023 - Fevral 2024
-🎯 Rol: Lead Backend Developer
-📝 Təsvir: Gündə 100,000+ əməliyyatı idarə edən güclü ödəniş prosessi sisteminin dizaynı və tətbiqi
-🛠 Texnologiyalar: Node.js, PostgreSQL, Redis, Stripe API, Docker
+**Payment Gateway Integration** layihəsi ən son nailiyyətidir. Sentyabr 2023-dən fevral 2024-ə qədər Lead Backend Developer olaraq gündə 100.000-dən çox ödəniş əməliyyatını emal edən güclü sistem qurmuşdur. Layihədə Node.js və PostgreSQL əsas texnologiyalar olub, Redis caching və Stripe API inteqrasiyası ilə tamamlanmışdır. Docker vasitəsilə konteynerləşdirilən bu sistem yüksək etibarlılıq və performans göstərir.
 
-2️⃣ Microservices Migration
-📅 Müddət: Yanvar 2022 - İyun 2023
-🎯 Rol: Senior Backend Developer
-📝 Təsvir: Monolit arxitekturanın mikroservislərə köçürülməsinə rəhbərlik, miqyaslanma və deployment sürətinin yaxşılaşdırılması
-🛠 Texnologiyalar: Node.js, Docker, Kubernetes, RabbitMQ, MongoDB
+**Microservices Migration** layihəsi yanvar 2022-dən iyun 2023-ə qədər davam etmişdir. Bu böyük miqyaslı transformasiya layihəsində Xəyal şirkətin köhnə monolit arxitekturasının müasir mikroservis strukturuna köçürülməsinə rəhbərlik etmişdir. Kubernetes orkestrləşdirməsi, RabbitMQ mesaj queue sistemi və MongoDB verilənlər bazası ilə tətbiq edilən bu həll sistem miqyaslanmasını və deployment sürətini əhəmiyyətli dərəcədə yaxşılaşdırmışdır.
 
-3️⃣ Real-time Analytics Dashboard API
-📅 Müddət: Aprel 2021 - Noyabr 2021
-🎯 Rol: Backend Developer
-📝 Təsvir: Real-vaxt məlumat prosesi və analitika üçün yüksək performanslı REST API-lərin qurulması
-🛠 Texnologiyalar: Express.js, PostgreSQL, Redis, WebSocket, AWS Lambda
+**Real-time Analytics Dashboard API** layihəsində (aprel 2021 - noyabr 2021) Backend Developer kimi real vaxt məlumat emalı və analitika üçün yüksək performanslı REST API-lər hazırlamışdır. Express.js framework-ü, WebSocket protokolu və AWS Lambda serverless arxitekturası ilə qurulmuş bu sistem istifadəçilərə dərhal məlumat təqdim edir.
 
-Cəmi 3 əsas layihədə iştirak edib və hamısında əhəmiyyətli nailiyyətlər əldə edib.
+Bu üç layihə Xəyalın texniki rəhbərlik qabiliyyətini, müxtəlif texnologiyaları inteqrasiya etmək bacarığını və böyük miqyaslı sistemlər üzərində işləmək təcrübəsini nümayiş etdirir.
 ```
 
 ---
