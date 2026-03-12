@@ -1,0 +1,527 @@
+You are an intelligent HR assistant with access to the company's employee database.
+
+Your job is to answer user questions about employees in a professional, natural, and informative manner.
+
+CORE RULES:
+1. Always search the employee dataset before answering
+2. Only use information that exists in the database
+3. Never invent or fabricate information not present in the dataset
+4. Write like a knowledgeable HR professional, not a database query tool
+5. Transform raw database fields into readable narratives
+6. If no employee exists, say: "Bu işçi verilənlər bazasında tapılmadı."
+7. If requested information is not available, say: "Bu məlumat verilənlər bazasında mövcud deyil."
+
+RESPONSE STYLE:
+- Write in clear, professional paragraphs
+- Use complete sentences that flow naturally
+- Connect information logically with context
+- Provide insights, not just data points
+- Sound like you're describing a colleague
+- Make technical information accessible
+
+RESPONSE LANGUAGE: All responses MUST be in Azerbaijani language.
+
+RESPONSE STRUCTURE FOR DETAILED EMPLOYEE QUERIES:
+1. Ümumi Məlumat (General Overview)
+2. Vəzifə və Şöbə (Position and Department)
+3. İş Təcrübəsi (Work Experience)
+4. Texniki Bacarıqlar (Technical Skills)
+5. Əsas Layihələr (Key Projects)
+6. Performans Təhlili (Performance Analysis)
+7. Peşəkar Xülasə (Professional Summary)
+
+---
+
+EMPLOYEE DATABASE:
+
+{
+  "employees": [
+    {
+      "id": 1,
+      "firstName": "Xəyal",
+      "lastName": "Məmmədov",
+      "fullName": "Xəyal Məmmədov",
+      "email": "xeyal.memmedov@company.com",
+      "phone": "+994-55-123-4567",
+      "position": "Senior Backend Developer",
+      "department": "Engineering",
+      "experienceYears": 8,
+      "skills": [
+        "Node.js",
+        "Express.js",
+        "PostgreSQL",
+        "MongoDB",
+        "REST API",
+        "Docker",
+        "Microservices",
+        "Redis",
+        "AWS",
+        "CI/CD"
+      ],
+      "salary": 95000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2018-03-15",
+      "manager": "Sarah Chen",
+      "location": "Baku, Azerbaijan",
+      "education": {
+        "degree": "Master of Science in Computer Science",
+        "university": "Azerbaijan Technical University",
+        "graduationYear": 2016
+      },
+      "languages": [
+        "Azerbaijani (Native)",
+        "English (Fluent)",
+        "Turkish (Proficient)",
+        "Russian (Intermediate)"
+      ],
+      "performanceSummary": "Xəyal is an exceptional backend developer who consistently delivers high-quality, scalable solutions. His deep expertise in microservices architecture has been instrumental in modernizing our legacy systems, resulting in a 40% improvement in system performance. He demonstrates strong leadership qualities by mentoring junior developers and conducting comprehensive code reviews. His proactive approach to identifying and resolving technical debt has saved the company significant resources, and he frequently proposes innovative solutions to complex engineering challenges.",
+      "projects": [
+        {
+          "name": "Payment Gateway Integration",
+          "role": "Lead Backend Developer",
+          "description": "Designed and implemented a robust payment processing system handling 100K+ daily transactions",
+          "duration": "2023-09 to 2024-02",
+          "technologies": [
+            "Node.js",
+            "PostgreSQL",
+            "Redis",
+            "Stripe API",
+            "Docker"
+          ]
+        },
+        {
+          "name": "Microservices Migration",
+          "role": "Senior Backend Developer",
+          "description": "Led the migration of monolithic architecture to microservices, improving scalability and deployment speed",
+          "duration": "2022-01 to 2023-06",
+          "technologies": [
+            "Node.js",
+            "Docker",
+            "Kubernetes",
+            "RabbitMQ",
+            "MongoDB"
+          ]
+        },
+        {
+          "name": "Real-time Analytics Dashboard API",
+          "role": "Backend Developer",
+          "description": "Built high-performance REST APIs for real-time data processing and analytics",
+          "duration": "2021-04 to 2021-11",
+          "technologies": [
+            "Express.js",
+            "PostgreSQL",
+            "Redis",
+            "WebSocket",
+            "AWS Lambda"
+          ]
+        }
+      ],
+      "bio": "Xəyal Məmmədov is a highly skilled Senior Backend Developer with eight years of professional experience in building scalable and efficient server-side applications. He specializes in Node.js ecosystem and has deep expertise in both SQL and NoSQL databases. Throughout his career, Xəyal has been instrumental in architecting microservices-based solutions that handle millions of requests daily. His passion for clean code and best practices has made him a go-to person for technical guidance within the engineering team. Beyond his technical capabilities, Xəyal is known for his excellent communication skills and his ability to translate complex technical concepts into business value. He actively contributes to open-source projects and regularly shares his knowledge through internal tech talks and workshops."
+    },
+    {
+      "id": 2,
+      "firstName": "Emily",
+      "lastName": "Rodriguez",
+      "fullName": "Emily Rodriguez",
+      "email": "emily.rodriguez@company.com",
+      "phone": "+1-415-555-0123",
+      "position": "Frontend Developer",
+      "department": "Engineering",
+      "experienceYears": 5,
+      "skills": [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "CSS3",
+        "HTML5",
+        "Redux",
+        "Next.js",
+        "Tailwind CSS",
+        "Jest",
+        "Figma"
+      ],
+      "salary": 82000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2020-06-01",
+      "manager": "Sarah Chen",
+      "location": "San Francisco, USA",
+      "education": {
+        "degree": "Bachelor of Science in Web Development",
+        "university": "University of California, Berkeley",
+        "graduationYear": 2019
+      },
+      "languages": [
+        "English (Native)",
+        "Spanish (Native)"
+      ],
+      "performanceSummary": "Emily excels in creating intuitive and responsive user interfaces. Her attention to detail and design aesthetics have significantly improved user engagement metrics. She collaborates effectively with designers and backend teams to deliver seamless user experiences.",
+      "projects": [
+        {
+          "name": "Customer Portal Redesign",
+          "role": "Frontend Developer",
+          "description": "Rebuilt customer-facing portal with modern React architecture, improving load times by 60%",
+          "duration": "2023-03 to 2024-01",
+          "technologies": [
+            "React",
+            "TypeScript",
+            "Next.js",
+            "Tailwind CSS"
+          ]
+        },
+        {
+          "name": "Component Library",
+          "role": "Lead Frontend Developer",
+          "description": "Created reusable component library used across all company products",
+          "duration": "2022-05 to 2023-02",
+          "technologies": [
+            "React",
+            "Storybook",
+            "TypeScript",
+            "CSS Modules"
+          ]
+        }
+      ],
+      "bio": "Emily Rodriguez is a creative Frontend Developer with a strong foundation in modern web technologies and a keen eye for design. She has spent the last five years crafting beautiful, accessible, and performant user interfaces for various web applications. Emily is passionate about staying current with the latest frontend trends and frequently experiments with new frameworks and tools. Her bilingual background helps her think about internationalization from the ground up. She believes in writing clean, maintainable code and advocates for comprehensive testing practices within her team."
+    },
+    {
+      "id": 3,
+      "firstName": "Marcus",
+      "lastName": "Johnson",
+      "fullName": "Marcus Johnson",
+      "email": "marcus.johnson@company.com",
+      "phone": "+1-512-555-0198",
+      "position": "DevOps Engineer",
+      "department": "Engineering",
+      "experienceYears": 7,
+      "skills": [
+        "AWS",
+        "Kubernetes",
+        "Docker",
+        "Terraform",
+        "Jenkins",
+        "GitLab CI/CD",
+        "Prometheus",
+        "Grafana",
+        "Linux",
+        "Python",
+        "Bash"
+      ],
+      "salary": 98000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2019-01-10",
+      "manager": "Sarah Chen",
+      "location": "Austin, USA",
+      "education": {
+        "degree": "Bachelor of Science in Information Technology",
+        "university": "Texas State University",
+        "graduationYear": 2017
+      },
+      "languages": [
+        "English (Native)"
+      ],
+      "performanceSummary": "Marcus is a highly reliable DevOps engineer who has transformed our deployment processes and infrastructure reliability. He reduced deployment time by 75% through automation and improved system uptime to 99.9%. His expertise in cloud infrastructure and monitoring has been crucial for scaling our services.",
+      "projects": [
+        {
+          "name": "Infrastructure as Code Implementation",
+          "role": "Lead DevOps Engineer",
+          "description": "Implemented Terraform for all infrastructure provisioning, enabling reproducible environments",
+          "duration": "2023-01 to 2023-08",
+          "technologies": [
+            "Terraform",
+            "AWS",
+            "GitLab CI/CD",
+            "Python"
+          ]
+        },
+        {
+          "name": "Kubernetes Migration",
+          "role": "DevOps Engineer",
+          "description": "Migrated all production services to Kubernetes, improving scalability and resource utilization",
+          "duration": "2021-09 to 2022-12",
+          "technologies": [
+            "Kubernetes",
+            "Docker",
+            "Helm",
+            "AWS EKS"
+          ]
+        }
+      ],
+      "bio": "Marcus Johnson is an experienced DevOps Engineer specializing in cloud infrastructure and automation. With seven years in the field, he has developed robust CI/CD pipelines and infrastructure solutions for multiple high-traffic applications. Marcus has a deep understanding of AWS services and container orchestration, which he leverages to build scalable and cost-effective systems. He is committed to the principles of Infrastructure as Code and believes in automating repetitive tasks to allow teams to focus on innovation. Marcus is also passionate about monitoring and observability, ensuring that systems are not just running but running optimally."
+    },
+    {
+      "id": 4,
+      "firstName": "Sarah",
+      "lastName": "Chen",
+      "fullName": "Sarah Chen",
+      "email": "sarah.chen@company.com",
+      "phone": "+1-650-555-0142",
+      "position": "Engineering Manager",
+      "department": "Engineering",
+      "experienceYears": 12,
+      "skills": [
+        "Team Leadership",
+        "Agile/Scrum",
+        "Project Management",
+        "Software Architecture",
+        "Strategic Planning",
+        "Stakeholder Management",
+        "Java",
+        "Python",
+        "Technical Mentoring"
+      ],
+      "salary": 135000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2016-08-22",
+      "manager": "David Thompson",
+      "location": "Palo Alto, USA",
+      "education": {
+        "degree": "Master of Science in Computer Engineering",
+        "university": "Stanford University",
+        "graduationYear": 2014
+      },
+      "languages": [
+        "English (Fluent)",
+        "Mandarin Chinese (Native)",
+        "Cantonese (Native)"
+      ],
+      "performanceSummary": "Sarah is an outstanding engineering leader who has built and scaled high-performing teams. She maintains excellent team morale while consistently delivering projects on time. Her technical background allows her to make informed decisions and provide valuable technical guidance. Under her leadership, team productivity has increased by 45% and employee satisfaction scores are consistently above 90%.",
+      "projects": [
+        {
+          "name": "Engineering Team Expansion",
+          "role": "Engineering Manager",
+          "description": "Grew engineering team from 8 to 25 members while maintaining code quality and delivery standards",
+          "duration": "2021-01 to 2024-03",
+          "technologies": [
+            "Leadership",
+            "Hiring",
+            "Process Optimization"
+          ]
+        },
+        {
+          "name": "Agile Transformation",
+          "role": "Engineering Manager",
+          "description": "Led transition to Agile methodologies, improving sprint completion rate from 65% to 92%",
+          "duration": "2019-06 to 2020-12",
+          "technologies": [
+            "Scrum",
+            "Jira",
+            "Agile Coaching"
+          ]
+        }
+      ],
+      "bio": "Sarah Chen is a seasoned Engineering Manager with over twelve years of experience in software development and team leadership. She transitioned from being a senior software engineer to management, bringing with her a deep technical understanding and empathy for individual contributors. Sarah is known for her ability to balance technical excellence with business objectives and for creating an inclusive environment where engineers can thrive. She is a strong advocate for continuous learning and invests significant time in mentoring and developing her team members. Her strategic thinking and execution skills have been key drivers in delivering multiple successful product launches."
+    },
+    {
+      "id": 5,
+      "firstName": "Priya",
+      "lastName": "Patel",
+      "fullName": "Priya Patel",
+      "email": "priya.patel@company.com",
+      "phone": "+44-20-7946-0958",
+      "position": "QA Engineer",
+      "department": "Engineering",
+      "experienceYears": 4,
+      "skills": [
+        "Test Automation",
+        "Selenium",
+        "Cypress",
+        "Jest",
+        "API Testing",
+        "Postman",
+        "Python",
+        "JavaScript",
+        "SQL",
+        "Jira",
+        "Test Planning"
+      ],
+      "salary": 68000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2021-09-15",
+      "manager": "Sarah Chen",
+      "location": "London, UK",
+      "education": {
+        "degree": "Bachelor of Engineering in Computer Science",
+        "university": "Imperial College London",
+        "graduationYear": 2020
+      },
+      "languages": [
+        "English (Fluent)",
+        "Hindi (Native)",
+        "Gujarati (Native)"
+      ],
+      "performanceSummary": "Priya has established comprehensive testing frameworks that caught 95% of bugs before production. Her automation scripts have reduced manual testing time by 60%. She demonstrates excellent attention to detail and proactively identifies edge cases that others miss.",
+      "projects": [
+        {
+          "name": "End-to-End Test Automation Suite",
+          "role": "QA Engineer",
+          "description": "Built comprehensive E2E testing framework covering critical user journeys",
+          "duration": "2023-02 to 2024-01",
+          "technologies": [
+            "Cypress",
+            "JavaScript",
+            "Docker",
+            "GitLab CI/CD"
+          ]
+        },
+        {
+          "name": "API Testing Framework",
+          "role": "QA Engineer",
+          "description": "Created automated API testing suite with over 500 test cases",
+          "duration": "2022-04 to 2023-01",
+          "technologies": [
+            "Python",
+            "Pytest",
+            "Postman",
+            "REST API"
+          ]
+        }
+      ],
+      "bio": "Priya Patel is a dedicated QA Engineer with four years of experience in ensuring software quality through both manual and automated testing. She has a strong background in test automation and has successfully implemented testing frameworks that have significantly improved product reliability. Priya believes that quality is everyone's responsibility but takes pride in being the last line of defense against bugs. Her methodical approach and curiosity drive her to explore every corner of an application. She enjoys collaborating with developers to understand features deeply and advocates for testability considerations early in the development cycle."
+    },
+    {
+      "id": 6,
+      "firstName": "Alex",
+      "lastName": "Kim",
+      "fullName": "Alex Kim",
+      "email": "alex.kim@company.com",
+      "phone": "+1-206-555-0176",
+      "position": "Data Analyst",
+      "department": "Analytics",
+      "experienceYears": 3,
+      "skills": [
+        "SQL",
+        "Python",
+        "Tableau",
+        "Power BI",
+        "Data Visualization",
+        "Statistics",
+        "R",
+        "Excel",
+        "BigQuery",
+        "A/B Testing"
+      ],
+      "salary": 72000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2022-02-01",
+      "manager": "Jennifer Wu",
+      "location": "Seattle, USA",
+      "education": {
+        "degree": "Master of Science in Data Science",
+        "university": "University of Washington",
+        "graduationYear": 2021
+      },
+      "languages": [
+        "English (Fluent)",
+        "Korean (Native)"
+      ],
+      "performanceSummary": "Alex consistently delivers actionable insights that drive business decisions. Their analysis led to a 25% increase in user retention through targeted feature improvements. They excel at communicating complex data findings to non-technical stakeholders.",
+      "projects": [
+        {
+          "name": "User Behavior Analysis Dashboard",
+          "role": "Data Analyst",
+          "description": "Created interactive dashboards tracking key user metrics and engagement patterns",
+          "duration": "2023-06 to 2024-02",
+          "technologies": [
+            "Tableau",
+            "SQL",
+            "Python",
+            "BigQuery"
+          ]
+        },
+        {
+          "name": "A/B Testing Framework",
+          "role": "Data Analyst",
+          "description": "Designed and implemented statistical framework for A/B testing experiments",
+          "duration": "2022-10 to 2023-05",
+          "technologies": [
+            "Python",
+            "SQL",
+            "Statistics",
+            "Jupyter"
+          ]
+        }
+      ],
+      "bio": "Alex Kim is an analytical and detail-oriented Data Analyst with three years of experience turning data into strategic insights. They graduated with a Master's in Data Science and quickly made an impact by identifying key trends and opportunities within large datasets. Alex is proficient in various data analysis tools and programming languages, allowing them to tackle diverse analytical challenges. They have a talent for creating compelling data visualizations that tell stories and drive action. Alex is passionate about using data to solve real-world problems and continuously seeks to expand their knowledge of statistical methods and machine learning techniques."
+    },
+    {
+      "id": 7,
+      "firstName": "Jordan",
+      "lastName": "Taylor",
+      "fullName": "Jordan Taylor",
+      "email": "jordan.taylor@company.com",
+      "phone": "+1-617-555-0134",
+      "position": "Product Manager",
+      "department": "Product",
+      "experienceYears": 6,
+      "skills": [
+        "Product Strategy",
+        "Roadmap Planning",
+        "User Research",
+        "Agile Methodologies",
+        "Stakeholder Management",
+        "Data Analysis",
+        "Wireframing",
+        "A/B Testing",
+        "SQL",
+        "Jira",
+        "Confluence"
+      ],
+      "salary": 110000,
+      "employmentType": "Full-time",
+      "status": "Active",
+      "joinDate": "2020-03-10",
+      "manager": "Michael Foster",
+      "location": "Boston, USA",
+      "education": {
+        "degree": "MBA, Product Management",
+        "university": "Harvard Business School",
+        "graduationYear": 2018
+      },
+      "languages": [
+        "English (Native)",
+        "French (Intermediate)"
+      ],
+      "performanceSummary": "Jordan has successfully launched five major features that collectively increased revenue by 35%. Their user-centric approach and data-driven decision making have been instrumental in product success. They maintain excellent relationships with both technical teams and business stakeholders, facilitating smooth execution of complex initiatives.",
+      "projects": [
+        {
+          "name": "Mobile App Launch",
+          "role": "Product Manager",
+          "description": "Led end-to-end product development for mobile app, reaching 100K downloads in first month",
+          "duration": "2023-01 to 2024-02",
+          "technologies": [
+            "Product Management",
+            "User Research",
+            "Agile",
+            "Analytics"
+          ]
+        },
+        {
+          "name": "Payment Features Expansion",
+          "role": "Product Manager",
+          "description": "Defined and launched new payment options, increasing conversion rate by 28%",
+          "duration": "2022-03 to 2023-12",
+          "technologies": [
+            "Product Strategy",
+            "User Research",
+            "A/B Testing"
+          ]
+        }
+      ],
+      "bio": "Jordan Taylor is a strategic Product Manager with six years of experience defining and delivering successful software products. With an MBA from Harvard Business School, Jordan combines strong business acumen with technical understanding to bridge the gap between user needs and technical capabilities. They are skilled at prioritizing features based on impact and feasibility, and are known for their ability to make tough decisions backed by data. Jordan believes in the power of user research and regularly engages with customers to understand their pain points. Their collaborative leadership style fosters innovation and ensures alignment across cross-functional teams."
+    }
+  ]
+}
+
+---
+
+USER QUERY: Xəyal haqqında məlumat ver
+
+---
+
+Now answer the user's query in Azerbaijani as a knowledgeable HR assistant, using only information from the database above. Transform the data into a natural, professional narrative.
