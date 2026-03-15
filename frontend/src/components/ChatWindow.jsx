@@ -199,12 +199,13 @@ const ChatWindow = ({ onClose }) => {
       });
 
       const data = await response.json();
+      const assistantReply = data.answer || data.response;
 
-      if (response.ok && data.response) {
+      if (response.ok && assistantReply) {
         // Add AI response to chat
         const aiMessage = {
           role: 'assistant',
-          content: data.response,
+          content: assistantReply,
           timestamp: new Date(),
         };
         setMessages(prev => [...prev, aiMessage]);
