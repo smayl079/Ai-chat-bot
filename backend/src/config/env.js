@@ -3,10 +3,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const DEFAULT_FALLBACK = 'The requested information is not available in the database.';
-const rawDbType = (process.env.DB_TYPE || (process.env.MONGODB_URI ? 'mongodb' : 'postgres')).toLowerCase();
+const explicitDbType = process.env.DB_TYPE?.trim().toLowerCase();
 
-if (!['postgres', 'mongodb'].includes(rawDbType)) {
-  throw new Error("DB_TYPE must be either 'postgres' or 'mongodb'.");
+let inferredDbType = 'none';
+
+if (process.env.DATABASE_URL) {
+  inferredDbType = 'postgres';
+} else if (process.env.MONGODB_URI) {
+  inferredDbType = 'mongodb';
+}
+
+const rawDbType = explicitDbType || inferredDbType;
+
+if (!['postgres', 'mongodb', 'none'].includes(rawDbType)) {
+  throw new Error("DB_TYPE must be either 'postgres', 'mongodb', or 'none'.");
 }
 
 const geminiApiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;

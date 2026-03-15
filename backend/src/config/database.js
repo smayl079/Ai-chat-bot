@@ -177,6 +177,11 @@ async function initializeMongo() {
 }
 
 export async function initializeDatabase() {
+  if (env.dbType === 'none') {
+    console.warn('No database configured (DB_TYPE=none). Employee lookups will return fallback responses.');
+    return;
+  }
+
   if (env.dbType === 'postgres') {
     await initializePostgres();
     return;
@@ -291,15 +296,19 @@ export async function findEmployeeByName(name) {
     return null;
   }
 
+  if (env.dbType === 'none') {
+    return null;
+  }
+
   if (env.dbType === 'postgres') {
     if (!pgPool) {
-      throw new Error('PostgreSQL connection is not initialized.');
+      return null;
     }
     return findEmployeeByNamePostgres(name.trim());
   }
 
   if (!mongoCollection) {
-    throw new Error('MongoDB connection is not initialized.');
+    return null;
   }
 
   return findEmployeeByNameMongo(name.trim());
