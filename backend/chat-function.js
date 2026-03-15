@@ -13,8 +13,9 @@ const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
  * Implements rate limiting: Gemini 2.5 Flash has 5 RPM limit (12 seconds between requests)
  */
 class ChatSession {
-  constructor(modelName = "gemini-2.5-flash") {
-    this.model = genAI.getGenerativeModel({ model: modelName });
+  constructor(modelName = "gemini-2.5-flash", modelInstance = null) {
+    // Use provided model instance or create a new one
+    this.model = modelInstance || genAI.getGenerativeModel({ model: modelName });
     this.conversationHistory = [];
     this.chat = null;
     this.lastRequestTime = 0;
