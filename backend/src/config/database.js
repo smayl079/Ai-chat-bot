@@ -1,17 +1,54 @@
-import { Pool } from 'pg';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { MongoClient } from 'mongodb';
+import { Pool } from 'pg';
 import { env } from './env.js';
 
 let pgPool = null;
 let pgColumns = new Set();
 let mongoClient = null;
 let mongoCollection = null;
+let seedEmployees = [];
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
+const defaultSeedFilePath = path.resolve(currentDir, '../../../database/employees-seed-data.json');
+const characterFoldMap = {
+  ə: 'e',
+  Ə: 'E',
+  ı: 'i',
+  İ: 'I',
+  ö: 'o',
+  Ö: 'O',
+  ü: 'u',
+  Ü: 'U',
+  ş: 's',
+  Ş: 'S',
+  ç: 'c',
+  Ç: 'C',
+  ğ: 'g',
+  Ğ: 'G',
+};
 
 function safeIdentifier(input, label) {
-  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(input)) {
+  if (!/^[_A-Za-z]\w*$/.test(input)) {
     throw new Error(`${label} contains invalid characters.`);
   }
+
   return input;
+}
+
+function normalizeSearchValue(value) {
+  const foldedValue = Array.from(String(value || '').normalize('NFKD'), (character) => {
+    return characterFoldMap[character] || character;
+  }).join('');
+
+  return foldedValue
+    .replaceAll(/[\u0300-\u036f]/g, '')
+    .replaceAll(/[^a-zA-Z0-9\s'-]/g, ' ')
+    .replaceAll(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
 }
 
 function normalizeSkills(rawSkills) {
@@ -20,33 +57,33 @@ function normalizeSkills(rawSkills) {
   }
 
   if (Array.isArray(rawSkills)) {
-    return rawSkills.map((item) => String(item)).filter(Boolean);
+    return rawSkills.map(String).filter(Boolean);
   }
 
-  if (typeof rawSkills === 'string') {
-    const trimmed = rawSkills.trim();
-    if (!trimmed) {
-      return [];
-    }
+  if (typeof rawSkills !== 'string') {
+    return [];
+  }
 
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-      try {
-        const parsed = JSON.parse(trimmed);
-        if (Array.isArray(parsed)) {
-          return parsed.map((item) => String(item)).filter(Boolean);
-        }
-      } catch {
-        // Ignore JSON parsing errors and continue with comma parsing.
+  const trimmed = rawSkills.trim();
+  if (!trimmed) {
+    return [];
+  }
+
+  if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) {
+        return parsed.map(String).filter(Boolean);
       }
+    } catch {
+      // Ignore JSON parsing errors and continue with comma parsing.
     }
-
-    return trimmed
-      .split(',')
-      .map((item) => item.trim())
-      .filter(Boolean);
   }
 
-  return [];
+  return trimmed
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function normalizeExperience(experience, experienceYears) {
@@ -81,6 +118,23 @@ function normalizeEmployee(employee) {
   };
 }
 
+async function loadSeedEmployees() {
+  try {
+    const rawContent = await fs.readFile(defaultSeedFilePath, 'utf8');
+    const parsed = JSON.parse(rawContent);
+    const employees = Array.isArray(parsed?.employees) ? parsed.employees : [];
+
+    seedEmployees = employees.map(normalizeEmployee).filter(Boolean);
+
+    if (seedEmployees.length > 0) {
+      console.log(`Loaded ${seedEmployees.length} employees from local seed data.`);
+    }
+  } catch (error) {
+    seedEmployees = [];
+    console.warn(`Local employee seed data unavailable: ${error.message}`);
+  }
+}
+
 function buildPostgresNameExpression() {
   if (pgColumns.has('name')) {
     return 'name';
@@ -107,11 +161,12 @@ function buildPostgresSelectClause() {
     );
   }
 
-  const positionExpr = pgColumns.has('position')
-    ? 'position'
-    : pgColumns.has('job_title')
-    ? 'job_title'
-    : 'NULL::text';
+  let positionExpr = 'NULL::text';
+  if (pgColumns.has('position')) {
+    positionExpr = 'position';
+  } else if (pgColumns.has('job_title')) {
+    positionExpr = 'job_title';
+  }
 
   const experienceExpr = pgColumns.has('experience') ? 'experience' : 'NULL::text';
   const experienceYearsExpr = pgColumns.has('experience_years') ? 'experience_years' : 'NULL';
@@ -176,9 +231,53 @@ async function initializeMongo() {
   console.log(`MongoDB connected. Employee collection: ${collectionName}`);
 }
 
+function getEmployeeSearchCandidates(employee) {
+  const values = [employee.name];
+  const nameParts = String(employee.name || '')
+    .split(/\s+/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (nameParts.length > 0) {
+    values.push(nameParts[0]);
+  }
+
+  if (nameParts.length > 1) {
+    values.push(nameParts.slice(0, 2).join(' '));
+  }
+
+  return [...new Set(values.filter(Boolean))];
+}
+
+function findEmployeeByNameSeed(name) {
+  if (seedEmployees.length === 0) {
+    return null;
+  }
+
+  const normalizedQuery = normalizeSearchValue(name);
+  const firstToken = normalizeSearchValue(name.split(/\s+/)[0] || name);
+
+  const exactMatch = seedEmployees.find((employee) => {
+    const candidates = new Set(getEmployeeSearchCandidates(employee).map(normalizeSearchValue));
+    return candidates.has(normalizedQuery) || candidates.has(firstToken);
+  });
+
+  if (exactMatch) {
+    return exactMatch;
+  }
+
+  return (
+    seedEmployees.find((employee) => {
+      const candidates = getEmployeeSearchCandidates(employee).map(normalizeSearchValue);
+      return candidates.some((candidate) => candidate.includes(normalizedQuery) || normalizedQuery.includes(candidate));
+    }) || null
+  );
+}
+
 export async function initializeDatabase() {
   if (env.dbType === 'none') {
-    console.warn('No database configured (DB_TYPE=none). Employee lookups will return fallback responses.');
+    console.warn('No database configured (DB_TYPE=none). Falling back to local employee seed data if available.');
+    await loadSeedEmployees();
     return;
   }
 
@@ -195,7 +294,6 @@ async function findEmployeeByNamePostgres(name) {
   const firstToken = name.split(/\s+/)[0] || name;
 
   const { nameExpr, selectClause } = buildPostgresSelectClause();
-
   const matchClauses = [`LOWER(${nameExpr}) = LOWER($1)`];
 
   if (pgColumns.has('first_name')) {
@@ -215,7 +313,6 @@ async function findEmployeeByNamePostgres(name) {
   `;
 
   const exactMatch = await pgPool.query(query, [name, firstToken]);
-
   if (exactMatch.rows.length > 0) {
     return normalizeEmployee(exactMatch.rows[0]);
   }
@@ -229,7 +326,6 @@ async function findEmployeeByNamePostgres(name) {
   `;
 
   const fuzzyMatch = await pgPool.query(fuzzyQuery, [`%${name}%`]);
-
   if (fuzzyMatch.rows.length > 0) {
     return normalizeEmployee(fuzzyMatch.rows[0]);
   }
@@ -238,7 +334,7 @@ async function findEmployeeByNamePostgres(name) {
 }
 
 function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return String(value).replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
 }
 
 async function findEmployeeByNameMongo(name) {
@@ -270,7 +366,6 @@ async function findEmployeeByNameMongo(name) {
   };
 
   const exactMatch = await mongoCollection.findOne(exactQuery, { projection });
-
   if (exactMatch) {
     return normalizeEmployee(exactMatch);
   }
@@ -283,7 +378,6 @@ async function findEmployeeByNameMongo(name) {
   };
 
   const fuzzyMatch = await mongoCollection.findOne(fuzzyQuery, { projection });
-
   if (fuzzyMatch) {
     return normalizeEmployee(fuzzyMatch);
   }
@@ -296,22 +390,25 @@ export async function findEmployeeByName(name) {
     return null;
   }
 
+  const normalizedName = name.trim();
+
   if (env.dbType === 'none') {
-    return null;
+    return findEmployeeByNameSeed(normalizedName);
   }
 
   if (env.dbType === 'postgres') {
     if (!pgPool) {
-      return null;
+      return findEmployeeByNameSeed(normalizedName);
     }
-    return findEmployeeByNamePostgres(name.trim());
+
+    return findEmployeeByNamePostgres(normalizedName);
   }
 
   if (!mongoCollection) {
-    return null;
+    return findEmployeeByNameSeed(normalizedName);
   }
 
-  return findEmployeeByNameMongo(name.trim());
+  return findEmployeeByNameMongo(normalizedName);
 }
 
 export async function closeDatabase() {
